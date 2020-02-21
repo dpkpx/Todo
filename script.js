@@ -22,18 +22,16 @@ document.querySelector('#form').addEventListener('submit', (event) => {
 function add() {
     todo = document.querySelector('#inputbox').value
     if (todo) {
-        //checking for available key
-        let off = 0;
-        for (let i = 0; i < document.querySelector('#ullist').children.length + off; i++) {
-            if (!(localStorage.getItem(i))) {
-                data.key = i;
-                break;
-            } else {
-                off++;
-            }
-        }
+
 
         //storing data
+        try {
+            data.key = (parseInt(document.querySelector('#ullist').children[0].children[0].children[0].children[0].id.replace('c', '')) + 1).toString();
+        }
+        catch (err) {
+
+            data.key = "0";
+        }
         data.input = todo;
         data.isChecked = false;
         localStorage.setItem(data.key, JSON.stringify(data))
