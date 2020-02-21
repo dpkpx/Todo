@@ -7,15 +7,14 @@ p.style = "color: crimson";
 document.querySelector('#inputdiv').appendChild(p)
 
 //object  
-
 let data = {
     key: 0,
     input: '',
     isChecked: false,
 }
+
 //getting input
 let todo;
-
 document.querySelector('#form').addEventListener('submit', (event) => {
     event.preventDefault();
     add();
@@ -33,31 +32,13 @@ function add() {
                 off++;
             }
         }
+
         //storing data
         data.input = todo;
         data.isChecked = false;
         localStorage.setItem(data.key, JSON.stringify(data))
-        // creating list
-        const list = document.createElement('li')
-        list.className = 'list'
-        list.setAttribute("style", "list-style-type:none; padding: 3px;margin-top: 5px; background-color:gray;")
-        let der = document.querySelector('#ullist')
-        der.insertBefore(list, der.childNodes[0])
-        //adding label
-        const label = document.createElement('label')
-        label.setAttribute("style", "font-size: 30px;text-transform:capitalize;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;")
-        let lists = document.querySelectorAll('.list')
-        lists[0].appendChild(label)
-        //adding checkbox
-        const checkbox = document.createElement('input')
-        checkbox.type = 'checkbox';
-        checkbox.id = 'c' + data.key
-        checkbox.setAttribute('onclick', 'checkdone(this)')
-        checkbox.setAttribute("style", "width: 27px;height: 27px;")
-        lists[0].children[0].appendChild(checkbox)
-        // adding text node 
-        let text = document.createTextNode(" " + todo);
-        lists[0].children[0].appendChild(text)
+        //adding todo to the screen
+        addRecord(data.key, data.input, data.isChecked);
         //clearing the input field
         document.querySelector('#inputbox').value = '';
         document.querySelector('#span').textContent = '';
@@ -69,60 +50,81 @@ function add() {
     }
 }
 
-
 // removing the checked item
 function remove() {
     let temp = document.querySelector('#ullist');
     for (let index = 0; index < temp.children.length; index++) {
-        if (temp.children[index].children[0].children[0].checked) {
-            localStorage.removeItem(temp.children[index].children[0].children[0].id.replace('c', ''));
+        if (temp.children[index].children[0].children[0].children[0].checked) {
+            localStorage.removeItem(temp.children[index].children[0].children[0].children[0].id.replace('c', ''));
             temp.removeChild(temp.children[index])
             index--;
         }
     }
 }
+
 //function for updating from localstorage
 function update() {
     let off = 0;
     for (let index = 0; index < localStorage.length + off; index++) {
         if (localStorage.getItem(index)) {
-            const list = document.createElement('li')
-            list.className = 'list'
-            list.setAttribute("style", "list-style-type:none; padding: 3px;margin-top: 5px; background-color:gray;")
-            let der = document.querySelector('#ullist')
-            der.insertBefore(list, der.childNodes[0])
-            //adding label
-            const label = document.createElement('label')
-            label.setAttribute("style", "font-size:30px;text-transform:capitalize;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;")
-            let lists = document.querySelectorAll('.list')
-            lists[0].appendChild(label)
-            //adding checkbox
-            const checkbox = document.createElement('input')
-            checkbox.type = 'checkbox'
-            checkbox.id = 'c' + JSON.parse(localStorage.getItem(index)).key
-            checkbox.setAttribute('onclick', 'checkdone(this)')
-            checkbox.setAttribute("style", "width: 27px;height: 27px;")
-            if (JSON.parse(localStorage.getItem(index)).isChecked) {
-                checkbox.setAttribute('checked', '')
-            }
-            //checkbox.setAttribute('checked', '')
-            lists[0].children[0].appendChild(checkbox)
-            // adding text node 
-            let text = document.createTextNode(" " + JSON.parse(localStorage.getItem(index)).input);
-            lists[0].children[0].appendChild(text)
+
+            addRecord(JSON.parse(localStorage.getItem(index)).key, JSON.parse(localStorage.getItem(index)).input, JSON.parse(localStorage.getItem(index)).isChecked)
+
         } else {
             off++;
         }
     }
 
 }
+
 //function to update checkbox
 function checkdone(checkbox) {
     let key = checkbox.id.replace('c', '');
     let temp = JSON.parse(localStorage.getItem(key));
-    data.key = parseInt(key);
+    data.key = key;
     data.input = temp.input;
     data.isChecked = checkbox.checked;
     localStorage.setItem(data.key, JSON.stringify(data))
+
+}
+
+//function for adding record
+function addRecord(key, inputdata, checked) {
+    const list = document.createElement('li')
+    list.className = 'list'
+    list.setAttribute("style", "list-style-type:none;border-radius: 5px;  padding: 3px;margin-top: 5px; background-color:#3f3f3f;")
+    let der = document.querySelector('#ullist')
+    der.insertBefore(list, der.childNodes[0])
+    //adding label
+    const label = document.createElement('label')
+    label.className = 'firstlevel'
+    label.setAttribute("style", "font-size:25px;color: #fff;text-transform:capitalize;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;")
+    let lists = document.querySelectorAll('.list')
+    lists[0].appendChild(label)
+    //creating div
+    const div = document.createElement('div');
+    div.className = "round";
+    div.setAttribute("style", "padding: 12px;")
+    let label2 = document.querySelectorAll('.firstlevel');
+    label2[0].appendChild(div);
+    //adding checkbox
+    const checkbox = document.createElement('input')
+    checkbox.type = 'checkbox'
+    checkbox.id = 'c' + key;
+    checkbox.setAttribute('onclick', 'checkdone(this)')
+    checkbox.setAttribute("style", "width: 27px;height: 27px;")
+    if (checked) {
+        checkbox.setAttribute('checked', '')
+    }
+    let finaldiv = document.querySelectorAll('.round');
+    finaldiv[0].appendChild(checkbox)
+    //adding label for checkbox
+    const label3 = document.createElement('label')
+    label3.setAttribute("for", 'c' + key)
+    let divround = document.querySelectorAll('.round')
+    divround[0].appendChild(label3)
+    // adding text node 
+    let text = document.createTextNode(" " + inputdata);
+    lists[0].children[0].children[0].appendChild(text)
 
 }
