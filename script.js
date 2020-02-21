@@ -45,7 +45,7 @@ function add() {
         der.insertBefore(list, der.childNodes[0])
         //adding label
         const label = document.createElement('label')
-        label.setAttribute("style", "font-size: 30px;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;")
+        label.setAttribute("style", "font-size: 30px;text-transform:capitalize;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;")
         let lists = document.querySelectorAll('.list')
         lists[0].appendChild(label)
         //adding checkbox
@@ -53,7 +53,7 @@ function add() {
         checkbox.type = 'checkbox';
         checkbox.id = 'c' + data.key
         checkbox.setAttribute('onclick', 'checkdone(this)')
-        checkbox.setAttribute("style", "width: 30px;height: 30px;")
+        checkbox.setAttribute("style", "width: 27px;height: 27px;")
         lists[0].children[0].appendChild(checkbox)
         // adding text node 
         let text = document.createTextNode(" " + todo);
@@ -93,7 +93,7 @@ function update() {
             der.insertBefore(list, der.childNodes[0])
             //adding label
             const label = document.createElement('label')
-            label.setAttribute("style", "font-size:30px;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;")
+            label.setAttribute("style", "font-size:30px;text-transform:capitalize;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;")
             let lists = document.querySelectorAll('.list')
             lists[0].appendChild(label)
             //adding checkbox
@@ -101,7 +101,7 @@ function update() {
             checkbox.type = 'checkbox'
             checkbox.id = 'c' + JSON.parse(localStorage.getItem(index)).key
             checkbox.setAttribute('onclick', 'checkdone(this)')
-            checkbox.setAttribute("style", "width: 30px;height: 30px;")
+            checkbox.setAttribute("style", "width: 27px;height: 27px;")
             if (JSON.parse(localStorage.getItem(index)).isChecked) {
                 checkbox.setAttribute('checked', '')
             }
