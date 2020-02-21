@@ -45,7 +45,7 @@ function add() {
         der.insertBefore(list, der.childNodes[0])
         //adding label
         const label = document.createElement('label')
-        label.setAttribute("style", "font-size: large;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;")
+        label.setAttribute("style", "font-size: 40px;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;")
         let lists = document.querySelectorAll('.list')
         lists[0].appendChild(label)
         //adding checkbox
@@ -53,10 +53,10 @@ function add() {
         checkbox.type = 'checkbox';
         checkbox.id = 'c' + data.key
         checkbox.setAttribute('onclick', 'checkdone(this)')
-        checkbox.setAttribute("style", "width: 15px;height: 15px;")
+        checkbox.setAttribute("style", "width: 30px;height: 30px;")
         lists[0].children[0].appendChild(checkbox)
         // adding text node 
-        let text = document.createTextNode(todo);
+        let text = document.createTextNode(" " + todo);
         lists[0].children[0].appendChild(text)
         //clearing the input field
         document.querySelector('#inputbox').value = '';
@@ -93,7 +93,7 @@ function update() {
             der.insertBefore(list, der.childNodes[0])
             //adding label
             const label = document.createElement('label')
-            label.setAttribute("style", "font-size: large;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;")
+            label.setAttribute("style", "font-size:40px;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;")
             let lists = document.querySelectorAll('.list')
             lists[0].appendChild(label)
             //adding checkbox
@@ -101,14 +101,14 @@ function update() {
             checkbox.type = 'checkbox'
             checkbox.id = 'c' + JSON.parse(localStorage.getItem(index)).key
             checkbox.setAttribute('onclick', 'checkdone(this)')
-            checkbox.setAttribute("style", "width: 15px;height: 15px;")
+            checkbox.setAttribute("style", "width: 30px;height: 30px;")
             if (JSON.parse(localStorage.getItem(index)).isChecked) {
                 checkbox.setAttribute('checked', '')
             }
             //checkbox.setAttribute('checked', '')
             lists[0].children[0].appendChild(checkbox)
             // adding text node 
-            let text = document.createTextNode(JSON.parse(localStorage.getItem(index)).input);
+            let text = document.createTextNode(" " + JSON.parse(localStorage.getItem(index)).input);
             lists[0].children[0].appendChild(text)
         } else {
             off++;
