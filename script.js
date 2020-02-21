@@ -102,7 +102,7 @@ function addRecord(key, inputdata, checked) {
     //creating div
     const div = document.createElement('div');
     div.className = "round";
-    div.setAttribute("style", "padding: 5px;")
+    div.setAttribute("style", "padding-bottom: 5px;")
     let label2 = document.querySelectorAll('.firstlevel');
     label2[0].appendChild(div);
     //adding checkbox
