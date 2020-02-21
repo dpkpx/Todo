@@ -40,11 +40,12 @@ function add() {
         // creating list
         const list = document.createElement('li')
         list.className = 'list'
-        list.setAttribute("style", "list-style-type: none")
+        list.setAttribute("style", "list-style-type:none; padding: 3px;margin-top: 5px; background-color:gray;")
         let der = document.querySelector('#ullist')
         der.insertBefore(list, der.childNodes[0])
         //adding label
         const label = document.createElement('label')
+        label.setAttribute("style", "font-size: large;font-family:cursive;")
         let lists = document.querySelectorAll('.list')
         lists[0].appendChild(label)
         //adding checkbox
@@ -52,6 +53,7 @@ function add() {
         checkbox.type = 'checkbox';
         checkbox.id = 'c' + data.key
         checkbox.setAttribute('onclick', 'checkdone(this)')
+        checkbox.setAttribute("style", "width: 15px;height: 15px;")
         lists[0].children[0].appendChild(checkbox)
         // adding text node 
         let text = document.createTextNode(todo);
@@ -86,12 +88,12 @@ function update() {
         if (localStorage.getItem(index)) {
             const list = document.createElement('li')
             list.className = 'list'
-            list.setAttribute("style", "list-style-type:none; margin-left: 0px;")
-            //list.setAttribute("style", "margin-left: 10px")
+            list.setAttribute("style", "list-style-type:none; padding: 3px;margin-top: 5px; background-color:gray;")
             let der = document.querySelector('#ullist')
             der.insertBefore(list, der.childNodes[0])
             //adding label
             const label = document.createElement('label')
+            label.setAttribute("style", "font-size: large;font-family:cursive;")
             let lists = document.querySelectorAll('.list')
             lists[0].appendChild(label)
             //adding checkbox
@@ -99,6 +101,7 @@ function update() {
             checkbox.type = 'checkbox'
             checkbox.id = 'c' + JSON.parse(localStorage.getItem(index)).key
             checkbox.setAttribute('onclick', 'checkdone(this)')
+            checkbox.setAttribute("style", "width: 15px;height: 15px;")
             if (JSON.parse(localStorage.getItem(index)).isChecked) {
                 checkbox.setAttribute('checked', '')
             }
