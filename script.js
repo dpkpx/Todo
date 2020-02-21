@@ -96,13 +96,13 @@ function addRecord(key, inputdata, checked) {
     //adding label
     const label = document.createElement('label')
     label.className = 'firstlevel'
-    label.setAttribute("style", "font-size:25px;color: #fff;text-transform:capitalize;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;")
+    label.setAttribute("style", "font-size:20px;color: #fff;text-transform:capitalize;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;")
     let lists = document.querySelectorAll('.list')
     lists[0].appendChild(label)
     //creating div
     const div = document.createElement('div');
     div.className = "round";
-    div.setAttribute("style", "padding: 12px;")
+    div.setAttribute("style", "padding: 5px;")
     let label2 = document.querySelectorAll('.firstlevel');
     label2[0].appendChild(div);
     //adding checkbox
