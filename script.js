@@ -39,7 +39,6 @@ function add() {
         //clearing the input field
         document.querySelector('#inputbox').value = '';
         document.querySelector('#span').textContent = '';
-
     } else {
         if (!(document.querySelector('#span').textContent)) {
             p.textContent = 'Please enter a todo first';
