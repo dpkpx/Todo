@@ -8,7 +8,7 @@ document.querySelector('#inputdiv').appendChild(p)
 
 //object  
 let data = {
-    key: 0,
+    key: "0",
     input: '',
     isChecked: false,
 }
@@ -29,7 +29,6 @@ function add() {
             data.key = (parseInt(document.querySelector('#ullist').children[0].children[0].children[0].children[0].id.replace('c', '')) + 1).toString();
         }
         catch (err) {
-
             data.key = "0";
         }
         data.input = todo;
@@ -83,6 +82,11 @@ function checkdone(checkbox) {
     data.input = temp.input;
     data.isChecked = checkbox.checked;
     localStorage.setItem(data.key, JSON.stringify(data))
+    if (checkbox.checked) {
+        checkbox.parentElement.parentElement.setAttribute("style", "text-decoration: line-through; font-size:20px;color: #fff;text-transform:capitalize;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;")
+    } else {
+        checkbox.parentElement.parentElement.setAttribute("style", "font-size:20px;color: #fff;text-transform:capitalize;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;")
+    }
 
 }
 
@@ -94,9 +98,9 @@ function addRecord(key, inputdata, checked) {
     let der = document.querySelector('#ullist')
     der.insertBefore(list, der.childNodes[0])
     //adding label
-    const label = document.createElement('label')
+    let label = document.createElement('label')
     label.className = 'firstlevel'
-    label.setAttribute("style", "font-size:20px;color: #fff;text-transform:capitalize;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;")
+    label.setAttribute("style", " font-size:20px;color: #fff;text-transform:capitalize;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;")
     let lists = document.querySelectorAll('.list')
     lists[0].appendChild(label)
     //creating div
@@ -108,11 +112,12 @@ function addRecord(key, inputdata, checked) {
     //adding checkbox
     const checkbox = document.createElement('input')
     checkbox.type = 'checkbox'
-    checkbox.id = 'c' + key;
+    checkbox.id = 'c' + key;// assigning id
     checkbox.setAttribute('onclick', 'checkdone(this)')
     checkbox.setAttribute("style", "width: 27px;height: 27px;")
     if (checked) {
-        checkbox.setAttribute('checked', '')
+        checkbox.setAttribute('checked', '')//assigning boolean
+        label.setAttribute("style", "text-decoration: line-through; font-size:20px;color: #fff;text-transform:capitalize;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;")
     }
     let finaldiv = document.querySelectorAll('.round');
     finaldiv[0].appendChild(checkbox)
@@ -122,7 +127,6 @@ function addRecord(key, inputdata, checked) {
     let divround = document.querySelectorAll('.round')
     divround[0].appendChild(label3)
     // adding text node 
-    let text = document.createTextNode(" " + inputdata);
+    let text = document.createTextNode("" + inputdata);// assigning todo data
     lists[0].children[0].children[0].appendChild(text)
-
 }
