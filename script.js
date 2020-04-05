@@ -60,6 +60,13 @@ function remove() {
 
 //function for updating from localstorage
 function update() {
+    let temp = document.querySelector('#ullist');
+    for (let index = 0; index < temp.children.length; index++) {
+        if (temp.children[index].children[0].children[0].children[0]) {
+            temp.removeChild(temp.children[index])
+            index--;
+        }
+    }
     let off = 0;
     for (let index = 0; index < localStorage.length + off; index++) {
         if (localStorage.getItem(index)) {
@@ -71,22 +78,97 @@ function update() {
         }
     }
 
+
 }
+
 
 //function to update checkbox
 function checkdone(checkbox) {
+    let keys = [];
+    let start;
+    let end;
     let key = checkbox.id.replace('c', '');
     let temp = JSON.parse(localStorage.getItem(key));
     data.key = key;
     data.input = temp.input;
     data.isChecked = checkbox.checked;
-    localStorage.setItem(data.key, JSON.stringify(data))
+    let found = false;
+    let data1 = {
+        key: "0",
+        input: '',
+        isChecked: false,
+    }
+    let off = 0;
+    for (let index = 0; index < localStorage.length + off; index++) {
+        if (localStorage.getItem(index)) {
+
+            keys.push(index);
+
+        } else {
+            off++;
+        }
+    }
     if (checkbox.checked) {
-        checkbox.parentElement.parentElement.setAttribute("style", "text-decoration: line-through; font-size:20px;color: #fff;text-transform:capitalize;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;")
+        checkbox.parentElement.parentElement.setAttribute("style", "text-decoration: line-through; font-size:20px;color: #fff;text-transform:capitalize;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;");
+        for (let i = 0; i < keys.length; i++) {
+            if (JSON.parse(localStorage.getItem(keys[i])).isChecked == true) {
+                 end = i;
+                data.key = keys[i + 1];
+            }
+        }
+        if (end==undefined) {
+            end = -1;
+            data.key = keys[0];
+        }
+
+
+        //  data.key = keys[0];
+        for (let i = keys.length - 1; i > end; i--) {
+            if (keys[i] == key) {
+                found = true;
+            }
+            if (found) {
+                if (keys[i] != key) {
+                    data1.key = keys[i] + 1;
+                    data1.input = JSON.parse(localStorage.getItem(keys[i])).input
+                    data1.isChecked = JSON.parse(localStorage.getItem(keys[i])).isChecked;
+                    localStorage.setItem(keys[i] + 1, JSON.stringify(data1))
+                }
+                localStorage.removeItem(keys[i])
+            }
+        }
+
     } else {
         checkbox.parentElement.parentElement.setAttribute("style", "font-size:20px;color: #fff;text-transform:capitalize;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;")
-    }
+        for (let i = 0; i < keys.length; i++) {
+            if (keys[i] == key) {
+                start = i;
+            }
+            if (JSON.parse(localStorage.getItem(keys[i])).isChecked == false) {
+                end = i;
+                data.key = keys[i - 1];
+                break;
+            } else {
+                end = keys.length;
+                data.key = keys[keys.length - 1];
+            }
+        }
 
+        for (let i = start; i < end; i++) {
+            if (keys[i] != key) {
+                data1.key = keys[i] - 1;
+                data1.input = JSON.parse(localStorage.getItem(keys[i])).input
+                data1.isChecked = JSON.parse(localStorage.getItem(keys[i])).isChecked;
+                localStorage.setItem(keys[i] - 1, JSON.stringify(data1))
+            } else {
+                localStorage.removeItem(keys[i]);
+
+            }
+        }
+
+    }
+   localStorage.setItem(data.key, JSON.stringify(data));
+    update();
 }
 
 //function for adding record
