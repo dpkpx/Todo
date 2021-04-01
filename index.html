@@ -7,30 +7,35 @@
     <title>Todo</title>
     <link rel="icon" type="image/png" href="favicon.png" />
     <link rel="stylesheet" href="styles.css">
-    
+
 </head>
 
 <body style="background-color:rgb(0, 0, 0)">
-    <h1 style="color: cyan;font-family:cursive;">Trello</h1>
-    <div id="inputdiv" style=" background-color:#3f3f3f;padding: 5px;border-radius: 5px;border:2px;border-color: rgba(0, 255, 255, 0.5);border-style: solid;">
-        <form id="form" autocomplete="off">
-            <input type="text" id='inputbox' name="TodoName" placeholder="  Type here" style="width:40%;background-color:rgb(0, 0, 0);color: #fff;">
-            <button style="margin-top: 0px;width:16%;background-color:rgb(0, 0, 0);color: #fff;" id="addbutton">Add</button>
-            <button style="margin-top: 0px;width:40%;background-color:rgb(0, 0, 0);color: #fff;" id="removebutton" type="button" onclick=remove()>Remove marked</button>
-        </form>
+    <div id="top">
+        <h1 style="color: cyan;font-family:cursive;">Trello</h1>
     </div>
-    <ul id="uList" style="padding: 0px;">
-        <!-- <li class="list"
+    <div id="middle">
+        <ul id="uList" style="padding: 0px;">
+            <!-- <li class="list"
             style="list-style-type:none;border-radius: 5px;  padding: 3px;margin-top: 5px; background-color:#3f3f3f;">
             <label class="firstlevel"
                 style="font-size:20px;color: #fff;text-transform:capitalize;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
                 <div class="round" style="padding-bottom: 5px;"><input type="checkbox" id="c3" onclick="checkdone(this)"
                         style="width: 27px;height: 27px;"><label for="c3"></label>test</div>
             </label></li> -->
-    </ul>
+        </ul>
+    </div>
+    <div id="bottom">
+        <div id="inputdiv">
+            <form id="form" autocomplete="off">
+                <input type="text" id='inputbox' name="TodoName" placeholder="  Type here">
+                <button class="button">Add</button>
+                <button class="button" id="removeButton" type="button" onclick=remove()>Remove marked</button>
+            </form>
+        </div>
+    </div>
     <script src="script.js"></script>
-    <!-- this is a comment adding from vscode -->
-    <!-- this is another comment -->
+
 </body>
 
 </html>

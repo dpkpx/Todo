@@ -4,7 +4,6 @@ update();
 //creating span to throw Error msg if input box is empty 
 let p = document.createElement('span');
 p.id = 'span';
-p.style = "color: crimson";
 document.querySelector('#inputdiv').appendChild(p)
 
 //object  to receive data
@@ -23,6 +22,9 @@ document.querySelector('#form').addEventListener('submit', (event) => {
 
 //function to add todo to local storage and Dom
 function add() {
+    
+    //scrolls to the top
+    document.documentElement.scrollTop = 0;
 
     let todo = document.querySelector('#inputbox').value
 
@@ -77,17 +79,22 @@ function update() {
     let temp = document.querySelector('#uList');
     temp.textContent = '';
 
-    //recreating all todos  in DOM
-    let off = 0;
-    for (let index = 0; index < localStorage.length + off; index++) {
-        if (localStorage.getItem(index)) {
 
-            addRecord(JSON.parse(localStorage.getItem(index)).key, JSON.parse(localStorage.getItem(index)).input, JSON.parse(localStorage.getItem(index)).isChecked)
-
-        } else {
-            off++;
-        }
+     //recreating all todos  in DOM
+    let keys = [];
+    for(let i = 0 ; i<localStorage.length;i++)
+    {
+        keys.push(localStorage.key(i));
     }
+    keys.sort(function(a, b){return a - b});
+
+
+    for (let index of keys)
+    {
+        addRecord(JSON.parse(localStorage.getItem(index)).key, JSON.parse(localStorage.getItem(index)).input, JSON.parse(localStorage.getItem(index)).isChecked)
+
+    }
+   
 
 }
 
@@ -111,16 +118,14 @@ function checkdone(checkbox) {
 
     //getting all available keys from localStorage
     let keys = [];
-    let off = 0;
-    for (let index = 0; index < localStorage.length + off; index++) {
-        if (localStorage.getItem(index)) {
 
-            keys.push(index);
-
-        } else {
-            off++;
-        }
+    for(let i = 0 ; i<localStorage.length;i++)
+    {
+        keys.push(localStorage.key(i));
     }
+    keys.sort(function(a, b){return a - b});
+
+    
 
 
     if (checkbox.checked) {
@@ -147,10 +152,10 @@ function checkdone(checkbox) {
         for (let i = --start; i > end; i--) {
 
 
-            tempData.key = keys[i] + 1;
+            tempData.key = keys[i + 1];
             tempData.input = JSON.parse(localStorage.getItem(keys[i])).input;
             tempData.isChecked = JSON.parse(localStorage.getItem(keys[i])).isChecked;
-            localStorage.setItem(keys[i] + 1, JSON.stringify(tempData));
+            localStorage.setItem(keys[i + 1], JSON.stringify(tempData));
 
         }
         /*after this loop there will be a duplicate element  at (end + 1) position
@@ -179,10 +184,10 @@ function checkdone(checkbox) {
         shifting will be done between the original position(start) of the cheched list and the end position*/
         for (let i = ++start; i < end; i++) {
 
-            tempData.key = keys[i] - 1;
+            tempData.key = keys[i - 1];
             tempData.input = JSON.parse(localStorage.getItem(keys[i])).input
             tempData.isChecked = JSON.parse(localStorage.getItem(keys[i])).isChecked;
-            localStorage.setItem(keys[i] - 1, JSON.stringify(tempData))
+            localStorage.setItem(keys[i - 1], JSON.stringify(tempData))
         }
         /*after this loop there will be a duplicate element  at (end - 1) position
         which will be replaced (outside of if-else block) by the list  which is unchecked  */
