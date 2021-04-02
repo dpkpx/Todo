@@ -1,11 +1,12 @@
 .round {
     position: relative;
-    padding-bottom: 5px;
+    padding-bottom: 8px;
+   
 }
 
 .round label {
-    background-color: #3f3f3f;
-    border: 1px solid #ccc;
+    background-color: #272626;
+    border: 2px solid #ccc;
     border-radius: 50%;
     cursor: pointer;
     height: 23px;
@@ -33,6 +34,8 @@
 
 .round input[type="checkbox"] {
     visibility: hidden;
+    margin-right: 10px;
+    margin-bottom: 5px;
 }
 
 .round input[type="checkbox"]:checked+label {
@@ -53,7 +56,7 @@
     border-radius: 5px;
     padding: 3px;
     margin-top: 5px;
-    background-color: #3f3f3f;
+    background-color: #272626;
 }
 
 .text {
@@ -73,13 +76,13 @@
 }
 
 #inputdiv {
-    background-color: #3f3f3f;
+    background-color: #272626;
     padding: 5px;
     border-radius: 5px;
     border: 2px;
     border-color: rgba(0, 255, 255, 0.5);
     border-style: solid;
-   
+   margin-right: 17px;
     
 }
 .button{
@@ -104,21 +107,22 @@
 
 
 #top {
-    position: sticky;
+    position: fixed;
     width: 100%;
     top: 0px;
-    
     background-color:rgb(0, 0, 0);
     z-index: 1;
     padding-bottom: 5px;
     
 }
 #middle{
-    position: relative;
+    margin-top: 100px;
+    margin-bottom: 100px;
+
 }
 
 #bottom{
-    position: sticky;
+    position: fixed;
     bottom: 0px;
     width: 100%;
     padding-top: 10px;

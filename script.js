@@ -22,7 +22,7 @@ document.querySelector('#form').addEventListener('submit', (event) => {
 
 //function to add todo to local storage and Dom
 function add() {
-    
+
     //scrolls to the top
     document.documentElement.scrollTop = 0;
 
