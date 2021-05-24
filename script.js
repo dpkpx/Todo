@@ -1,6 +1,10 @@
 //upadating from local storage
 update(false);
 
+//boolean to stop users from cleacking multiple time on same element
+//(cleacking multiple time on same element while animating results duplicate list items)
+let clickAvailable = true;
+
 //object  to receive data
 let data = {
     key: "0",
@@ -97,136 +101,143 @@ function update(animate) {
 
 //function to bubble up or down lists when checked or unchecked
 function checkdone(checkbox) {
-    let key = checkbox.id.replace('c', '');
-    let temp = JSON.parse(localStorage.getItem(key));
+    if (clickAvailable) {
 
 
-    data.key = key;
-    data.input = temp.input;
-    data.isChecked = checkbox.checked;
+        let key = checkbox.id.replace('c', '');
+        let temp = JSON.parse(localStorage.getItem(key));
 
 
-    let tempData = {
-        key: "0",
-        input: '',
-        isChecked: false,
+        data.key = key;
+        data.input = temp.input;
+        data.isChecked = checkbox.checked;
+
+
+        let tempData = {
+            key: "0",
+            input: '',
+            isChecked: false,
+        }
+
+        //getting all available keys from localStorage
+        let keys = [];
+
+        for (let i = 0; i < localStorage.length; i++) {
+            keys.push(localStorage.key(i));
+        }
+        keys.sort(function (a, b) { return a - b });
+
+
+
+
+        if (checkbox.checked) {
+
+            clickAvailable = false;
+            /*finding the  position to place the checked list
+            checked list will be placed just above another already checked list(end) if none then it will be placed at buttom */
+            let start;
+            let end;
+            for (let i = keys.length - 1; i >= 0; i--) {
+                if (keys[i] == key) {
+                    start = i;
+                }
+                if (JSON.parse(localStorage.getItem(keys[i])).isChecked == true) {
+                    end = i;
+                    data.key = keys[i + 1];
+                    break;
+                } else {
+                    end = - 1;
+                    data.key = keys[0];
+                }
+            }
+            /*creating empty position for the checked list to be inserted
+            shifting will be done between the original position(start) of the cheched list and the end position*/
+            for (let i = --start; i > end; i--) {
+
+
+                tempData.key = keys[i + 1];
+                tempData.input = JSON.parse(localStorage.getItem(keys[i])).input;
+                tempData.isChecked = JSON.parse(localStorage.getItem(keys[i])).isChecked;
+                localStorage.setItem(keys[i + 1], JSON.stringify(tempData));
+
+            }
+            /*after this loop there will be a duplicate element  at (end + 1) position
+            which will be replaced (outside of if-else block) by the list  which is unchecked  */
+
+            //animating
+            let ele = document.querySelector("#" + checkbox.id).parentElement.parentElement.parentElement;
+            ele.className = "listWithAnimation";
+            setTimeout(function () {
+                if (end != -1) {
+                    ele.parentNode.insertBefore(ele, ele.parentNode.children[(ele.parentNode.childElementCount - 1) - end]);
+                } else {
+                    ele.parentNode.appendChild(ele);
+                }
+            }, 300);
+
+            setTimeout(function () {
+                ele.className = ele.className + " show";
+            }, 350);
+
+
+
+        } else {
+
+            clickAvailable = false;
+            /*finding the  position to place the unchecked list
+            checked list will be placed just below another already unchecked list(start) if none then it will be placed at top */
+            let start;
+            let end;
+            for (let i = 0; i < keys.length; i++) {
+                if (keys[i] == key) {
+                    start = i;
+                }
+                if (JSON.parse(localStorage.getItem(keys[i])).isChecked == false) {
+                    end = i;
+                    data.key = keys[i - 1];
+                    break;
+                } else {
+                    end = keys.length;
+                    data.key = keys[keys.length - 1];
+                }
+            }
+
+            /*creating empty position for the checked list to be inserted
+            shifting will be done between the original position(start) of the cheched list and the end position*/
+            for (let i = ++start; i < end; i++) {
+
+                tempData.key = keys[i - 1];
+                tempData.input = JSON.parse(localStorage.getItem(keys[i])).input
+                tempData.isChecked = JSON.parse(localStorage.getItem(keys[i])).isChecked;
+                localStorage.setItem(keys[i - 1], JSON.stringify(tempData))
+            }
+            /*after this loop there will be a duplicate element  at (end - 1) position
+            which will be replaced (outside of if-else block) by the list  which is unchecked  */
+
+            //animating 
+            let ele = document.querySelector("#" + checkbox.id).parentElement.parentElement.parentElement;
+            ele.className = "listWithAnimation";
+            setTimeout(function () {
+                if (end != ele.parentNode.childElementCount) {
+                    ele.parentNode.insertBefore(ele, (ele.parentNode.children[(ele.parentNode.childElementCount - 1) - end]).nextSibling);
+                } else {
+                    ele.parentNode.prepend(ele);
+                }
+            }, 300);
+
+            setTimeout(function () {
+                ele.className = ele.className + " show";
+            }, 350);
+
+        }
+        localStorage.setItem(data.key, JSON.stringify(data));
+
+        setTimeout(function () {
+            update(false);
+            clickAvailable = true;
+        }, 600);
+
     }
-
-    //getting all available keys from localStorage
-    let keys = [];
-
-    for (let i = 0; i < localStorage.length; i++) {
-        keys.push(localStorage.key(i));
-    }
-    keys.sort(function (a, b) { return a - b });
-
-
-
-
-    if (checkbox.checked) {
-
-        /*finding the  position to place the checked list
-        checked list will be placed just above another already checked list(end) if none then it will be placed at buttom */
-        let start;
-        let end;
-        for (let i = keys.length - 1; i >= 0; i--) {
-            if (keys[i] == key) {
-                start = i;
-            }
-            if (JSON.parse(localStorage.getItem(keys[i])).isChecked == true) {
-                end = i;
-                data.key = keys[i + 1];
-                break;
-            } else {
-                end = - 1;
-                data.key = keys[0];
-            }
-        }
-        /*creating empty position for the checked list to be inserted
-        shifting will be done between the original position(start) of the cheched list and the end position*/
-        for (let i = --start; i > end; i--) {
-
-
-            tempData.key = keys[i + 1];
-            tempData.input = JSON.parse(localStorage.getItem(keys[i])).input;
-            tempData.isChecked = JSON.parse(localStorage.getItem(keys[i])).isChecked;
-            localStorage.setItem(keys[i + 1], JSON.stringify(tempData));
-
-        }
-        /*after this loop there will be a duplicate element  at (end + 1) position
-        which will be replaced (outside of if-else block) by the list  which is unchecked  */
-
-        //animating
-        let ele = document.querySelector("#" + checkbox.id).parentElement.parentElement.parentElement;
-        ele.className = "listWithAnimation";
-        setTimeout(function () {
-            if (end != -1) {
-                ele.parentNode.insertBefore(ele, ele.parentNode.children[(ele.parentNode.childElementCount - 1) - end]);
-            } else {
-                ele.parentNode.appendChild(ele);
-            }
-        }, 300);
-
-        setTimeout(function () {
-            ele.className =  ele.className + " show";
-        }, 350);
-
-
-        
-    } else {
-
-        /*finding the  position to place the unchecked list
-        checked list will be placed just below another already unchecked list(start) if none then it will be placed at top */
-        let start;
-        let end;
-        for (let i = 0; i < keys.length; i++) {
-            if (keys[i] == key) {
-                start = i;
-            }
-            if (JSON.parse(localStorage.getItem(keys[i])).isChecked == false) {
-                end = i;
-                data.key = keys[i - 1];
-                break;
-            } else {
-                end = keys.length;
-                data.key = keys[keys.length - 1];
-            }
-        }
-
-        /*creating empty position for the checked list to be inserted
-        shifting will be done between the original position(start) of the cheched list and the end position*/
-        for (let i = ++start; i < end; i++) {
-
-            tempData.key = keys[i - 1];
-            tempData.input = JSON.parse(localStorage.getItem(keys[i])).input
-            tempData.isChecked = JSON.parse(localStorage.getItem(keys[i])).isChecked;
-            localStorage.setItem(keys[i - 1], JSON.stringify(tempData))
-        }
-        /*after this loop there will be a duplicate element  at (end - 1) position
-        which will be replaced (outside of if-else block) by the list  which is unchecked  */
-
-        //animating 
-        let ele = document.querySelector("#" + checkbox.id).parentElement.parentElement.parentElement;
-        ele.className = "listWithAnimation";
-        setTimeout(function () {
-            if (end != ele.parentNode.childElementCount) {
-                ele.parentNode.insertBefore(ele, (ele.parentNode.children[(ele.parentNode.childElementCount - 1) - end]).nextSibling);
-            } else {
-                ele.parentNode.prepend(ele);
-            }
-        }, 300);
-
-        setTimeout(function () {
-            ele.className = ele.className + " show";
-        }, 350);
-
-    }
-    localStorage.setItem(data.key, JSON.stringify(data));
-
-    setTimeout(function () {
-        update(false);
-    }, 600);
-
 }
 
 //function for adding record
@@ -277,7 +288,7 @@ function addRecord(key, inputdata, checked, animate) {
     if (animate) {
         list.className = "listWithAnimation";
         setTimeout(function () {
-            list.className = list.className +" show";
+            list.className = list.className + " show";
         }, 10);
     }
 
