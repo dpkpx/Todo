@@ -1,10 +1,5 @@
 //upadating from local storage
-update();
-
-//creating span to throw Error msg if input box is empty 
-let p = document.createElement('span');
-p.id = 'span';
-document.querySelector('#inputdiv').appendChild(p)
+update(false);
 
 //object  to receive data
 let data = {
@@ -47,19 +42,16 @@ function add() {
         localStorage.setItem(data.key, JSON.stringify(data));
 
         //adding todo to the screen
-        addRecord(data.key, data.input, data.isChecked);
+        addRecord(data.key, data.input, data.isChecked, true);
 
         //clearing the input field
-        document.querySelector('#inputbox').value = '';
+        document.querySelector('#inputbox').value = "";
         document.querySelector('#span').textContent = '';
 
-    } else {
-        //showing error msg when input box is empty
-        if (!(document.querySelector('#span').textContent)) {
-            p.textContent = 'Please enter a todo first';
-        }
     }
 }
+
+
 
 // removing the checked items
 function remove() {
@@ -67,34 +59,38 @@ function remove() {
     for (let index = 0; index < temp.children.length; index++) {
         if (temp.children[index].children[0].children[0].children[0].checked) {
             localStorage.removeItem(temp.children[index].children[0].children[0].children[0].id.replace('c', ''));
-            temp.removeChild(temp.children[index]);
-            index--;
+
+            temp.children[index].className = "listWithAnimation";
+
+            setTimeout(function () {
+                temp.removeChild(temp.children[temp.children.length - 1])
+            }, 350);
+
+
         }
     }
 }
 
 //function for updating from localstorage
-function update() {
+function update(animate) {
     //deleting all todos from DOM
     let temp = document.querySelector('#uList');
     temp.textContent = '';
 
 
-     //recreating all todos  in DOM
+    //recreating all todos  in DOM
     let keys = [];
-    for(let i = 0 ; i<localStorage.length;i++)
-    {
+    for (let i = 0; i < localStorage.length; i++) {
         keys.push(localStorage.key(i));
     }
-    keys.sort(function(a, b){return a - b});
+    keys.sort(function (a, b) { return a - b });
 
 
-    for (let index of keys)
-    {
-        addRecord(JSON.parse(localStorage.getItem(index)).key, JSON.parse(localStorage.getItem(index)).input, JSON.parse(localStorage.getItem(index)).isChecked)
+    for (let index of keys) {
+        addRecord(JSON.parse(localStorage.getItem(index)).key, JSON.parse(localStorage.getItem(index)).input, JSON.parse(localStorage.getItem(index)).isChecked, animate)
 
     }
-   
+
 
 }
 
@@ -119,13 +115,12 @@ function checkdone(checkbox) {
     //getting all available keys from localStorage
     let keys = [];
 
-    for(let i = 0 ; i<localStorage.length;i++)
-    {
+    for (let i = 0; i < localStorage.length; i++) {
         keys.push(localStorage.key(i));
     }
-    keys.sort(function(a, b){return a - b});
+    keys.sort(function (a, b) { return a - b });
 
-    
+
 
 
     if (checkbox.checked) {
@@ -160,6 +155,24 @@ function checkdone(checkbox) {
         }
         /*after this loop there will be a duplicate element  at (end + 1) position
         which will be replaced (outside of if-else block) by the list  which is unchecked  */
+
+        //animating
+        let ele = document.querySelector("#" + checkbox.id).parentElement.parentElement.parentElement;
+        ele.className = "listWithAnimation";
+        setTimeout(function () {
+            if (end != -1) {
+                ele.parentNode.insertBefore(ele, ele.parentNode.children[(ele.parentNode.childElementCount - 1) - end]);
+            } else {
+                ele.parentNode.appendChild(ele);
+            }
+        }, 300);
+
+        setTimeout(function () {
+            ele.className =  ele.className + " show";
+        }, 350);
+
+
+        
     } else {
 
         /*finding the  position to place the unchecked list
@@ -191,18 +204,39 @@ function checkdone(checkbox) {
         }
         /*after this loop there will be a duplicate element  at (end - 1) position
         which will be replaced (outside of if-else block) by the list  which is unchecked  */
+
+        //animating 
+        let ele = document.querySelector("#" + checkbox.id).parentElement.parentElement.parentElement;
+        ele.className = "listWithAnimation";
+        setTimeout(function () {
+            if (end != ele.parentNode.childElementCount) {
+                ele.parentNode.insertBefore(ele, (ele.parentNode.children[(ele.parentNode.childElementCount - 1) - end]).nextSibling);
+            } else {
+                ele.parentNode.prepend(ele);
+            }
+        }, 300);
+
+        setTimeout(function () {
+            ele.className = ele.className + " show";
+        }, 350);
+
     }
     localStorage.setItem(data.key, JSON.stringify(data));
-    update();
+
+    setTimeout(function () {
+        update(false);
+    }, 600);
+
 }
 
 //function for adding record
-function addRecord(key, inputdata, checked) {
+function addRecord(key, inputdata, checked, animate) {
     let list = document.createElement('li')
     list.className = 'list'
 
     let container = document.querySelector('#uList')
-    container.insertBefore(list, container.childNodes[0])
+    container.prepend(list);
+
 
     //adding label
     let label = document.createElement('label')
@@ -224,9 +258,9 @@ function addRecord(key, inputdata, checked) {
     checkbox.className = "check";
     if (checked) {
         checkbox.setAttribute('checked', '')//assigning boolean
-        label.classList="linedLabel text";
+        label.classList = "linedLabel text";
     }
-    
+
     div.appendChild(checkbox)
 
     //adding label for checkbox
@@ -239,4 +273,12 @@ function addRecord(key, inputdata, checked) {
     let text = document.createTextNode(inputdata);// assigning todo data
 
     div.appendChild(text)
+
+    if (animate) {
+        list.className = "listWithAnimation";
+        setTimeout(function () {
+            list.className = list.className +" show";
+        }, 10);
+    }
+
 }
