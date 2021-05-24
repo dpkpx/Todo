@@ -96,7 +96,7 @@
     height: 30px;
     width: 25px;
     border: none;
-    background-image: url(../assets/trash--v2.png);
+    background-image: url(/Todo/assets/trash--v2.png);
     background-size: 30px 30px;
     background-color: #272626;
     background-repeat: no-repeat;
