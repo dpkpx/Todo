@@ -46,7 +46,7 @@ function add() {
 
         //clearing the input field
         document.querySelector('#inputbox').value = "";
-        document.querySelector('#span').textContent = '';
+
 
     }
 }
