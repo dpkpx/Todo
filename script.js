@@ -1,16 +1,6 @@
 //upadating from local storage
 update(false);
 
-//boolean to stop users from cleacking multiple time on same element
-//(cleacking multiple time on same element while animating results duplicate list items)
-let clickAvailable = true;
-
-//object  to receive data
-let data = {
-    key: "0",
-    input: '',
-    isChecked: false,
-}
 
 //getting input on submit
 document.querySelector('#form').addEventListener('submit', (event) => {
@@ -18,6 +8,12 @@ document.querySelector('#form').addEventListener('submit', (event) => {
     add();
 });
 
+//object  to receive data
+let data = {
+    key: "0",
+    input: '',
+    isChecked: false,
+}
 
 //function to add todo to local storage and Dom
 function add() {
@@ -87,7 +83,7 @@ function update(animate) {
     for (let i = 0; i < localStorage.length; i++) {
         keys.push(localStorage.key(i));
     }
-    keys.sort(function (a, b) { return a - b });
+    keys.sort((a, b) =>  a - b );
 
 
     for (let index of keys) {
@@ -98,6 +94,9 @@ function update(animate) {
 
 }
 
+//boolean to stop users from cleacking multiple time on same element
+//(cleacking multiple time on same element while animating results duplicate list items)
+let clickAvailable = true;
 
 //function to bubble up or down lists when checked or unchecked
 function checkdone(checkbox) {
@@ -125,7 +124,7 @@ function checkdone(checkbox) {
         for (let i = 0; i < localStorage.length; i++) {
             keys.push(localStorage.key(i));
         }
-        keys.sort(function (a, b) { return a - b });
+        keys.sort( (a, b) => a - b );
 
 
 
@@ -151,7 +150,7 @@ function checkdone(checkbox) {
                 }
             }
             /*creating empty position for the checked list to be inserted
-            shifting will be done between the original position(start) of the cheched list and the end position*/
+            shifting will be done between the original position(start) of the checked list and the end position*/
             for (let i = --start; i > end; i--) {
 
 

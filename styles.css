@@ -95,15 +95,11 @@
     outline: none;
 }
 
-#span {
-    color: crimson;
-
-}
 
 #inputbox {
 
     background-color: rgb(0, 0, 0);
-    width: 90%; 
+    width: calc(100% - 40px); 
     font-size: large;
     height: 27px;
     color: #fff;
@@ -118,11 +114,12 @@
 #top {
     position: fixed;
     width: 100%;
+    
     top: 0px;
     background-color: rgb(0, 0, 0);
     z-index: 1;
     padding-bottom: 5px;
-
+    
 }
 
 #middle {
@@ -163,4 +160,13 @@
     margin-top: 5px;
     background-color: #272626;
     opacity: 1;
+}
+
+
+#title {
+    margin-top: 20px;
+    height: 60px;
+    background-image: url(/assets/title.svg);
+    background-size: 120px;
+    background-repeat: no-repeat;
 }
