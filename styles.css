@@ -166,7 +166,7 @@
 #title {
     margin-top: 20px;
     height: 60px;
-    background-image: url(/assets/title.svg);
+    background-image: url(../Todo/assets/title.svg);
     background-size: 120px;
     background-repeat: no-repeat;
 }
