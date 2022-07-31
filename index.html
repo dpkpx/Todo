@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo</title>
@@ -10,41 +11,42 @@
 
 </head>
 
-<body style="background-color:rgb(0, 0, 0)">
-    <main>
-    <div id="top">
-        <div id="title"></div>
-        <!-- <h1 style="color: cyan;font-family:cursive;">Tasks</h1> -->
+<body>
+
+    <div class="container">
+
+        <header>
+
+            <div class="logo"></div>
+
+        </header>
+
+        <main>
+
+            <ul class="todosWrapper">
+                <div class="todosContainerNew"></div>
+                <input type="checkbox" id="chk" hidden onchange="hideCompleted(this)">
+                <label class="header_completed" for="chk"><div class="chevron_down"></div><Span>Completed</Span></label>
+                <div class="todosContainerDone"></div>
+
+            </ul>
+            
+        </main>
+
+        <footer>
+
+            <div class="inputWrapper">
+                <form autocomplete="off">
+                    <input type="text" id="inputbox" name="TodoText" placeholder=" Type here">
+                    <button class="button" id="removeButton" type="button" title="Clear all done Todos"
+                        onclick=deleteAllDoneTodo()></button>
+                </form>
+            </div>
+
+        </footer>
+
     </div>
-    <div id="middle">
-        <ul id="uList" style="padding: 0px;">
-            <!-- <li class="list"style="list-style-type:none;border-radius: 5px;  padding: 3px;margin-top: 5px; background-color:#3f3f3f;">
-                    
-                    <label class="firstlevel" style="font-size:20px;color: #fff;text-transform:capitalize;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
-                         
-                        <div class="round" style="padding-bottom: 5px;">
-                            
-                            <input type="checkbox" id="c3" onclick="checkdone(this)" style="width: 27px;height: 27px;">
-                        
-                            <label for="c3"></label>test
-                       
-                        </div>
-                   
-                    </label>
-                
-                </li> 
-            -->
-        </ul>
-    </div>
-    <div id="bottom">
-        <div id="inputdiv">
-            <form id="form" autocomplete="off">
-                <input type="text" id='inputbox' name="TodoName" placeholder=" Type here">
-                <button class="button" id="removeButton" type="button"  onclick=remove()></button>
-            </form>
-        </div>
-    </div>
-</main>
+
     <script src="script.js"></script>
 
 </body>

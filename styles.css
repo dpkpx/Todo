@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
 
+
 html{
     box-sizing: border-box;
 }
@@ -8,19 +9,28 @@ body{
     margin: 0;
     padding: 10px;
     box-sizing: inherit;
+    background-color:rgb(0, 0, 0)
    
 }
+
+::-webkit-scrollbar{
+    display: none;
+}
+
 *,*::before,*::after{
     box-sizing: inherit;
 
 }
-.round {
+.todoContent {
     position: relative;
     padding-bottom: 8px;
+    font-size: 20px;
+    color: #fff;
+    text-transform: capitalize;
 
 }
 
-.round label {
+.todoContent label {
     background-color: #272626;
     border: 2px solid #ccc;
     border-radius: 50%;
@@ -34,7 +44,7 @@ body{
     width: 27px;
 }
 
-.round label:after {
+.todoContent label:after {
     border: 2px solid rgb(0, 0, 0);
     border-top: none;
     border-right: none;
@@ -48,41 +58,36 @@ body{
     width: 14px;
 }
 
-.round input[type="checkbox"] {
+.todoContent input[type="checkbox"] {
     visibility: hidden;
     margin-right: 10px;
     margin-bottom: 5px;
-}
-
-.round input[type="checkbox"]:checked+label {
-    background-color: cyan;
-    border-color: cyan;
-}
-
-.round input[type="checkbox"]:checked+label:after {
-    opacity: 1;
-}
-
-.container {
-    margin: 0 auto;
-}
-
-.text {
-    font-size: 20px;
-    color: #fff;
-    text-transform: capitalize;
-}
-
-.linedLabel {
-    text-decoration: line-through;
-}
-
-.check {
     width: 27px;
     height: 27px;
 }
 
-#inputdiv {
+.todoContent input[type="checkbox"]:checked+label {
+    background-color: hsl(180, 100%, 30%);
+    border-color: hsl(180, 100%, 30%);
+}
+
+.todoContent input[type="checkbox"]:checked~.todoText {
+    text-decoration: line-through;
+    color: hsl(0, 0%, 60%);
+}
+
+.todoContent input[type="checkbox"]:checked+label:after {
+    opacity: 1;
+}
+
+
+
+.linedLabel {
+    
+}
+
+
+.inputWrapper {
     background-color: #272626;
     padding: 5px;
     height: 47px;
@@ -93,12 +98,12 @@ body{
     border-style: solid;
 }
 
-#form{
+form{
     display: flex;
     align-items: center;
-    /* gap: 1rem; */
 }
-#removeButton {
+
+form button {
     height: 30px;
     width: 30px;
     border: none;
@@ -111,7 +116,7 @@ body{
 }
 
 
-#inputbox {
+form input {
 
     background-color: rgb(0, 0, 0);
     width: calc(100% - 30px); 
@@ -126,7 +131,7 @@ body{
 
 
 
-#top {
+header {
     position: fixed;
     width: calc(100% - 20px);
     top: 0px;
@@ -137,13 +142,13 @@ body{
     
 }
 
-#middle {
+main {
     margin-top: 100px;
     margin-bottom: 100px;
 
 }
 
-#bottom {
+footer {
     position: fixed;
     bottom: 0px;
     width: calc(100% - 20px);
@@ -153,13 +158,29 @@ body{
 }
 
 
-.list {
+.todosWrapper{
+    padding: 0px;
+}
+
+.todo {
     list-style-type: none;
     border-radius: 5px;
     padding: 3px;
     margin-top: 5px;
     background-color: #272626;
+    position: relative;
+    overflow: hidden;
 
+}
+
+
+.todoText{
+    padding-left: 40px;
+    margin-top: -25px;
+    -webkit-user-select: none;  
+  -moz-user-select: none;    
+  -ms-user-select: none;      
+  user-select: none;
 }
 
 .listWithAnimation {
@@ -169,16 +190,11 @@ body{
 }
 
 .show {
-    list-style-type: none;
-    border-radius: 5px;
-    padding: 3px;
-    margin-top: 5px;
-    background-color: #272626;
     opacity: 1;
 }
 
 
-#title {
+.logo {
     margin-top: 20px;
     height: 60px;
     background-image: url(./assets/title.svg);
@@ -186,20 +202,90 @@ body{
     background-repeat: no-repeat;
 }
 
+.contextMenu{
+    display: none;
+    position: absolute;
+    background-color:inherit;
+    top: 0;
+    right: 0;
+}
+.contextMenu:focus-visible{
+   outline: none;
+}
+
+.contextMenu button{
+    width: 35px;
+    aspect-ratio: 1;
+    background-color: inherit;
+    border: none;
+    background-size: contain;
+}
+
+.contextMenu .edit{
+   
+    background-image: url(./assets/bx-message-square-edit.svg);
+    
+}
+.contextMenu .delete{
+  
+    background-image: url(./assets/bx-message-square-x.svg);
+}
+
 @media screen and (min-width:640px) {
     body{
         display: grid;
         place-content: center;
+        
     }
-    main{
+    .container{
         width: 600px;
     }
 
-    #top{
+    header{
         width: inherit;
     }
     
-    #bottom{
+    footer{
         width: inherit;
     }
+}
+.todosContainerDone{
+    overflow: hidden;
+  
+}
+
+.header_completed{
+    display: inline-block;
+    color: #272626;
+    margin-block: 10px;
+    -webkit-user-select: none;  
+    -moz-user-select: none;    
+    -ms-user-select: none;      
+    user-select: none;
+}
+.chevron_down{
+    display: inline-block ;
+    width: 10px;
+    margin-right: 10px;
+    aspect-ratio: 1;
+    background-image: url(./assets/bx-chevron-down.svg);
+    background-position: center;
+    transition: all 0.3s ease-out;
+}
+
+#chk:checked ~ .todosContainerDone{
+   
+    animation: hideCompleted .5s ease-out forwards;
+  
+}
+
+#chk:checked ~ .header_completed .chevron_down{
+    
+   transform: rotate(-180deg);
+
+}
+
+@keyframes hideCompleted {
+    0% {opacity: 1 }
+    100% {opacity: 0;height: 0px; }
 }
