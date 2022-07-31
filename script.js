@@ -131,6 +131,7 @@ function handelSubmit(e) {
     } else {
 
         addTodoToScreen(id, isChecked, todoText, animate)
+
     }
 
     todos[id] = { id, isChecked, todoText };
@@ -143,10 +144,13 @@ function updateLocalStorage() {
     localStorage.setItem("todos", JSON.stringify(todos))
 }
 
-
 function updateScreen() {
     todos = JSON.parse(localStorage.getItem("todos"))
-    if (!todos) localStorage.setItem("todos", JSON.stringify({}))
+    if (!todos) {
+        localStorage.setItem("todos", JSON.stringify({}));
+        todos = JSON.parse(localStorage.getItem("todos"))
+        return
+    }
     let ids = Object.keys(todos).map((id => parseInt(id))).sort((a, b) => a - b)
 
     ids.forEach((id) => {
@@ -201,15 +205,15 @@ function hideCompleted(checkbox) {
 
 }
 
-function deleteAllDoneTodo(){
+function deleteAllDoneTodo() {
     let ids = Object.keys(todos).map((id => parseInt(id)))
 
     ids.forEach((id) => {
-        if(todos[id].isChecked){
+        if (todos[id].isChecked) {
             delete todos[id];
-           
+
         }
     })
     updateLocalStorage();
-   document.querySelector(".todosContainerDone").innerHTML="";
+    document.querySelector(".todosContainerDone").innerHTML = "";
 }
