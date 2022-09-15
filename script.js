@@ -1,49 +1,28 @@
-let timer;
+import {doc,  deleteDoc, uid, db, query,where, getDocs, setDoc,  onSnapshot, collection } from "./firebase.js"
 let tempCurrentTodo;
-let todos = {};
-let doNotAnimation = false
-let animate = true
-
+// let doNotAnimation = false
+// let animate = true
 // ===================== flag ====================
 let editMode = false;
 // ===============================================
-updateScreen();
 
 let todosWrapper = document.querySelector(".todosWrapper");
-
-todosWrapper.addEventListener("pointerdown", pointerDown);
-
-document.querySelector(".inputWrapper form").addEventListener("submit", handelSubmit)
+todosWrapper.addEventListener("contextmenu", showCustomMenu);
 
 
-todosWrapper.addEventListener("contextmenu", (e) => {
+let inputBox = document.querySelector(".inputWrapper form");
+inputBox.addEventListener("submit", handelSubmit)
+
+
+function showCustomMenu(e) {
     e.preventDefault();
     let todo = e.target.closest(".todo")
     if (!todo) return;
-    showMenu(todo);
+    customMenu(todo);
     todo.querySelector("input[type='checkbox']").disabled = true;
-});
-
-
-function pointerDown(e) {
-    clearTimer();
-    let todo = e.target.closest(".todo")
-    if (!todo) return;
-    timer = setTimeout(() => {
-        showMenu(todo);
-        todo.querySelector("input[type='checkbox']").disabled = true;
-    }, 1300)
-    document.body.addEventListener("pointerup", clearTimer, { once: true })
 }
 
-
-function clearTimer() {
-    if (!timer) return
-    clearTimeout(timer)
-}
-
-
-function showMenu(todo) {
+function customMenu(todo) {
     let contextMenu = todo.querySelector(".contextMenu")
     contextMenu.style.display = "block"
     contextMenu.focus();
@@ -56,30 +35,7 @@ function showMenu(todo) {
     }, { once: true })
 }
 
-
-function editTodo(editButton) {
-    editMode = true;
-    let todo = editButton.parentElement.parentElement
-    let todoText = todo.querySelector(".todoText").innerText
-    let inputBox = document.querySelector('#inputbox')
-    tempCurrentTodo = todo
-    inputBox.focus();
-    inputBox.value = todoText
-
-}
-
-
-function deleteTodo(deleteButton) {
-    let todo = deleteButton.parentElement.parentElement
-    todo.parentElement.removeChild(todo)
-    let todoId = todo.querySelector("input[type='checkbox']").id.replace("c", "")
-    delete todos[todoId]
-
-    updateLocalStorage();
-}
-
-
-function addTodoToScreen(id, isChecked, todoText, animate) {
+function addTodoToScreen(id, isChecked, todoText, animate=true) {
     let todosContainerNew = document.querySelector(".todosContainerNew")
     let todosContainerDone = document.querySelector(".todosContainerDone")
 
@@ -110,7 +66,6 @@ function addTodoToScreen(id, isChecked, todoText, animate) {
     isChecked ? todosContainerDone.prepend(todo) : todosContainerNew.prepend(todo)
 }
 
-
 function handelSubmit(e) {
 
     e.preventDefault();
@@ -124,96 +79,103 @@ function handelSubmit(e) {
 
     if (editMode) {
         tempCurrentTodo.querySelector(".todoText span").innerText = todoText;
-        id = tempCurrentTodo.querySelector("input[type='checkbox']").id.replace("c", "")
+        id = parseInt(tempCurrentTodo.querySelector("input[type='checkbox']").id.replace("c", ""))
         isChecked = tempCurrentTodo.querySelector(`#c${id}`).checked
         editMode = false;
 
-    } else {
-
-        addTodoToScreen(id, isChecked, todoText, animate)
-
     }
-
-    todos[id] = { id, isChecked, todoText };
-    updateLocalStorage();
     inputbox.value = "";
-}
 
+    setDoc(doc(db, `${uid}/todos/MyTodos`, String(id)), {
 
-function updateLocalStorage() {
-    localStorage.setItem("todos", JSON.stringify(todos))
-}
-
-function updateScreen() {
-    todos = JSON.parse(localStorage.getItem("todos"))
-    if (!todos) {
-        localStorage.setItem("todos", JSON.stringify({}));
-        todos = JSON.parse(localStorage.getItem("todos"))
-        return
-    }
-    let ids = Object.keys(todos).map((id => parseInt(id))).sort((a, b) => a - b)
-
-    ids.forEach((id) => {
-        addTodoToScreen(id, todos[id].isChecked, todos[id].todoText, doNotAnimation)
-    })
-
-    let hideCompleted = JSON.parse(localStorage.getItem("hideCompleted"))
-
-    if (hideCompleted) {
-        document.querySelector("#chk").checked = true;
-        document.querySelector(".todosContainerDone").style = "height:0px";
-        setTimeout(function () {
-            document.querySelector(".todosContainerDone").style = "";
-
-        }, 500);
-    }
+        isChecked: isChecked,
+        todoText: todoText
+    });
 
 }
 
-function todoStateChange(checkbox) {
+window.todoStateChange = function (checkbox) {
     let todo = checkbox.parentElement.parentElement.parentElement
-    let oldTodoId = checkbox.id.replace("c", "")
+    let idOld = checkbox.id.replace("c", "")
     let isChecked = checkbox.checked
-    let todoText = todos[oldTodoId].todoText
-    let id = Date.now()
+    let todoText = todo.querySelector(".todoText").innerText
+    let id = Date.now();
 
-    delete todos[oldTodoId]
-    todos[id] = { id, isChecked, todoText };
-    checkbox.id = "c" + id;
+    todo.parentElement.removeChild(todo)
+    
+    deleteDoc(doc(db, `${uid}/todos/MyTodos`, String(idOld)));
 
-    if (isChecked) {
-        let todosContainerDone = document.querySelector(".todosContainerDone")
-        todosContainerDone.insertBefore(todo, todosContainerDone.children[0])
-    } else {
-        let todosContainerNew = document.querySelector(".todosContainerNew")
-        todosContainerNew.insertBefore(todo, todosContainerNew.children[0])
-    }
 
-    todo.className = "todo listWithAnimation";
-    setTimeout(function () {
-        todo.className = todo.className + " show";
-    }, 10);
+    setDoc(doc(db, `${uid}/todos/MyTodos`, String(id)), {
 
-    updateLocalStorage();
-
+        isChecked: isChecked,
+        todoText: todoText
+    });
 
 }
 
-function hideCompleted(checkbox) {
+window.hideCompleted = function (checkbox) {
     let isHidden = !!checkbox.checked
     localStorage.setItem("hideCompleted", isHidden)
 
 }
 
-function deleteAllDoneTodo() {
-    let ids = Object.keys(todos).map((id => parseInt(id)))
+window.deleteAllDoneTodo = async function () {
 
-    ids.forEach((id) => {
-        if (todos[id].isChecked) {
-            delete todos[id];
-
-        }
-    })
-    updateLocalStorage();
     document.querySelector(".todosContainerDone").innerHTML = "";
+
+    const q = query(collection(db, `${uid}/todos/MyTodos`), where("isChecked", "==", true));
+
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((docRef) => {
+        // doc.data() is never undefined for query doc snapshots
+        deleteDoc(doc(db, `${uid}/todos/MyTodos`, String(docRef.id)));
+
+    });
+
 }
+
+window.openMenu = function () {
+    document.querySelector(".friends").style = "display:flex"
+}
+
+window.closeMenu = function () {
+    document.querySelector(".friends").style = ""
+}
+
+window.editTodo = function (editButton) {
+    editMode = true;
+    let todo = editButton.parentElement.parentElement
+    let todoText = todo.querySelector(".todoText").innerText
+    let inputBox = document.querySelector('#inputbox')
+    tempCurrentTodo = todo
+    inputBox.focus();
+    inputBox.value = todoText
+
+}
+
+window.deleteTodo = function (deleteButton) {
+    let todo = deleteButton.parentElement.parentElement
+    todo.parentElement.removeChild(todo)
+    let todoId = todo.querySelector("input[type='checkbox']").id.replace("c", "")
+   
+    deleteDoc(doc(db, `${uid}/todos/MyTodos`, String(todoId)));
+}
+
+
+const q = query(collection(db, `${uid}/todos/MyTodos`));
+onSnapshot(q, (snapshot) => {
+    snapshot.docChanges().forEach((change) => {
+        if (change.type === "added") {
+            console.log("Added : ", change.doc.id);
+            addTodoToScreen(change.doc.id, change.doc.data().isChecked, change.doc.data().todoText)
+        }
+        if (change.type === "modified") {
+            console.log("Modified : ", change.doc.data());
+        }
+        if (change.type === "removed") {
+            console.log("Removed : ", change.doc.data());
+        }
+    });
+});
+

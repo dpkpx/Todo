@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-
+    <link rel="manifest" href="manifest.webmanifest">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo</title>
@@ -18,37 +18,58 @@
         <header>
 
             <div class="logo"></div>
+            <div class="menu" onclick="openMenu()"></div>
+            <div class="friends">
+                <div class="friendsHeader"><span>Assign to friends</span>
+                    <div class="close" onclick="closeMenu()"></div>
+                </div>
+                <button id="signOutButton"">Sign Out</button>
+            </div>
 
         </header>
 
         <main>
 
-            <ul class="todosWrapper">
-                <div class="todosContainerNew"></div>
-                <input type="checkbox" id="chk" hidden onchange="hideCompleted(this)">
-                <label class="header_completed" for="chk"><div class="chevron_down"></div><Span>Completed</Span></label>
-                <div class="todosContainerDone"></div>
+            <ul class=" todosWrapper">
+                    <div class="todosContainerNew"></div>
+                    <input type="checkbox" id="chk" hidden onchange="hideCompleted(this)">
+                    <label class="header_completed" for="chk">
+                        <div class="chevron_down"></div><Span>Completed</Span>
+                    </label>
+                    <div class="todosContainerDone"></div>
 
-            </ul>
-            
-        </main>
+                    </ul>
 
-        <footer>
+                    </main>
 
-            <div class="inputWrapper">
-                <form autocomplete="off">
-                    <input type="text" id="inputbox" name="TodoText" placeholder=" Type here">
-                    <button class="button" id="removeButton" type="button" title="Clear all done Todos"
-                        onclick=deleteAllDoneTodo()></button>
-                </form>
+                    <footer>
+
+                        <div class="inputWrapper">
+                            <form autocomplete="off">
+                                <input type="text" id="inputbox" name="TodoText" placeholder=" Type here">
+                                <button class="button" id="removeButton" type="button" title="Clear all done Todos"
+                                    onclick=deleteAllDoneTodo()></button>
+                            </form>
+                        </div>
+
+                    </footer>
+
             </div>
 
-        </footer>
 
-    </div>
-
-    <script src="script.js"></script>
-
+            <script async>
+                if ("serviceWorker" in navigator) {
+                    window.addEventListener("load", () => {
+                        navigator.serviceWorker.register("/sw.js")
+                            .then(
+                                console.log("Service worker registered")
+                            )
+                    })
+                }
+            </script>
+            <script type="module" src="script.js"></script>
+            <script type="module" src="firebase.js"></script>
+           
 </body>
 
 </html>

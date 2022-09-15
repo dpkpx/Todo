@@ -1,26 +1,34 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
 
+:root{
+    --accent-color:hsl(180, 100%, 30%);
+    --background-color-dark:hsl(0, 0%, 0%);
+    --background-color-less-dark:hsl(0, 1%, 15%);
+}
 
-html{
+html {
     box-sizing: border-box;
 }
-body{
+
+body {
     font-family: 'Inter', sans-serif;
     margin: 0;
     padding: 10px;
     box-sizing: inherit;
-    background-color:rgb(0, 0, 0)
-   
+    background-color: var(--background-color-dark)
 }
 
-::-webkit-scrollbar{
+::-webkit-scrollbar {
     display: none;
 }
 
-*,*::before,*::after{
+*,
+*::before,
+*::after {
     box-sizing: inherit;
 
 }
+
 .todoContent {
     position: relative;
     padding-bottom: 8px;
@@ -31,7 +39,7 @@ body{
 }
 
 .todoContent label {
-    background-color: #272626;
+    background-color: var(--background-color-less-dark);
     border: 2px solid #ccc;
     border-radius: 50%;
     cursor: pointer;
@@ -45,7 +53,7 @@ body{
 }
 
 .todoContent label:after {
-    border: 2px solid rgb(0, 0, 0);
+    border: 2px solid var(--background-color-dark);
     border-top: none;
     border-right: none;
     content: "";
@@ -67,8 +75,8 @@ body{
 }
 
 .todoContent input[type="checkbox"]:checked+label {
-    background-color: hsl(180, 100%, 30%);
-    border-color: hsl(180, 100%, 30%);
+    background-color:var(--accent-color) ;
+    border-color: var(--accent-color);
 }
 
 .todoContent input[type="checkbox"]:checked~.todoText {
@@ -82,17 +90,17 @@ body{
 
 
 .inputWrapper {
-    background-color: #272626;
+    background-color: var(--background-color-less-dark);
     padding: 5px;
     height: 47px;
     width: 100%;
     border-radius: 5px;
     border: 2px;
-    border-color: rgba(0, 255, 255, 0.5);
+    border-color:var(--accent-color);
     border-style: solid;
 }
 
-form{
+form {
     display: flex;
     align-items: center;
 }
@@ -101,9 +109,9 @@ form button {
     height: 30px;
     width: 30px;
     border: none;
-    background-image: url(./assets/trash--v2.png);
+    background-image: url(./assets/icons8-trash-24.png);
     background-size: 30px 30px;
-    background-color: #272626;
+    background-color: var(--background-color-less-dark);
     background-repeat: no-repeat;
     outline: none;
     margin-left: 5px;
@@ -112,15 +120,14 @@ form button {
 
 form input {
 
-    background-color: rgb(0, 0, 0);
-    width: calc(100% - 30px); 
+    background-color: var(--background-color-dark);
+    width: calc(100% - 30px);
     font-size: large;
     height: 33px;
     color: #fff;
-    border-color: rgba(0, 255, 255, 0.5);
+    border-color: var(--accent-color);
     outline: none;
     border-radius: 3px;
-
 }
 
 
@@ -129,11 +136,81 @@ header {
     position: fixed;
     width: calc(100% - 20px);
     top: 0px;
-    background-color: rgb(0, 0, 0);
+    background-color: var(--background-color-dark);
     z-index: 1;
     padding-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+}
+
+.logo {
+    margin-top: 20px;
+    height: 60px;
+    width: 150px;
+    background-image: url(./assets/title.svg);
+    background-size: 120px;
+    background-repeat: no-repeat;
+    background-position: left;
+}
+
+.menu {
+    margin-top: 20px;
+    height: 60px;
+    width: 60px;
+    background-image: url(./assets/bx-menu.svg);
+    background-size: 50px;
+    background-repeat: no-repeat;
+    background-position: right;
+
+}
+
+.friends{
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    background-color:var(--background-color-less-dark);
+    width: 200px;
+    height: 300px;
+    right:0px;
+    top: 37px;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: -2px 2px 5px 0 var(--accent-color);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+}
+
+.friendsHeader{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
     
-    
+}
+.friendsHeader span{
+    margin-left: auto;
+    color: #ccc;
+
+}
+.friends .close{
+    height: 20px;
+    width: 20px;
+    background-image: url(./assets/bx-x.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 40px;
+    margin-left: auto;
+}
+.friends button{
+    margin-top: auto;
+    width: 100%;
+    border-radius: 5px;
+    border: none;
+    height: 30px;
 }
 
 main {
@@ -148,11 +225,11 @@ footer {
     width: calc(100% - 20px);
     padding-top: 10px;
     padding-bottom: 10px;
-   background-color: rgb(0, 0, 0);
+    background-color: var(--background-color-dark);
 }
 
 
-.todosWrapper{
+.todosWrapper {
     padding: 0px;
 }
 
@@ -161,20 +238,20 @@ footer {
     border-radius: 5px;
     padding: 3px;
     margin-top: 5px;
-    background-color: #272626;
+    background-color: var(--background-color-less-dark);
     position: relative;
     overflow: hidden;
 
 }
 
 
-.todoText{
+.todoText {
     padding-left: 40px;
     margin-top: -25px;
-    -webkit-user-select: none;  
-  -moz-user-select: none;    
-  -ms-user-select: none;      
-  user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .listWithAnimation {
@@ -188,26 +265,20 @@ footer {
 }
 
 
-.logo {
-    margin-top: 20px;
-    height: 60px;
-    background-image: url(./assets/title.svg);
-    background-size: 120px;
-    background-repeat: no-repeat;
-}
 
-.contextMenu{
+.contextMenu {
     display: none;
     position: absolute;
-    background-color:inherit;
+    background-color: inherit;
     top: 0;
     right: 0;
 }
-.contextMenu:focus-visible{
-   outline: none;
+
+.contextMenu:focus-visible {
+    outline: none;
 }
 
-.contextMenu button{
+.contextMenu button {
     width: 35px;
     aspect-ratio: 1;
     background-color: inherit;
@@ -215,50 +286,54 @@ footer {
     background-size: contain;
 }
 
-.contextMenu .edit{
-   
+.contextMenu .edit {
+
     background-image: url(./assets/bx-message-square-edit.svg);
-    
+
 }
-.contextMenu .delete{
-  
+
+.contextMenu .delete {
+
     background-image: url(./assets/bx-message-square-x.svg);
 }
 
 @media screen and (min-width:640px) {
-    body{
+    body {
         display: grid;
         place-content: center;
-        
+
     }
-    .container{
+
+    .container {
         width: 600px;
     }
 
-    header{
+    header {
         width: inherit;
     }
-    
-    footer{
+
+    footer {
         width: inherit;
     }
-}
-.todosContainerDone{
-    overflow: hidden;
-  
 }
 
-.header_completed{
+.todosContainerDone {
+    overflow: hidden;
+
+}
+
+.header_completed {
     display: inline-block;
-    color: #272626;
+    color: var(--background-color-less-dark);
     margin-block: 10px;
-    -webkit-user-select: none;  
-    -moz-user-select: none;    
-    -ms-user-select: none;      
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
 }
-.chevron_down{
-    display: inline-block ;
+
+.chevron_down {
+    display: inline-block;
     width: 10px;
     margin-right: 10px;
     aspect-ratio: 1;
@@ -267,19 +342,25 @@ footer {
     transition: all 0.3s ease-out;
 }
 
-#chk:checked ~ .todosContainerDone{
-   
+#chk:checked~.todosContainerDone {
+
     animation: hideCompleted .5s ease-out forwards;
-  
+
 }
 
-#chk:checked ~ .header_completed .chevron_down{
-    
-   transform: rotate(-180deg);
+#chk:checked~.header_completed .chevron_down {
+
+    transform: rotate(-180deg);
 
 }
 
 @keyframes hideCompleted {
-    0% {opacity: 1 }
-    100% {opacity: 0;height: 0px; }
+    0% {
+        opacity: 1
+    }
+
+    100% {
+        opacity: 0;
+        height: 0px;
+    }
 }
